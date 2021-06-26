@@ -2,6 +2,7 @@ import {getCustomRepository} from "typeorm";
 import {UsersRepositories} from "../repositories/UsersRepositories";
 import {compare} from "bcryptjs";
 import {sign} from "jsonwebtoken"
+import {logger} from "../logger";
 
 interface IAuthenticateRequest {
     email: string;
@@ -18,16 +19,19 @@ class AuthenticationService {
         });
 
         if (!user) {
+            logger.error(`Email or password incorrect ${email}, ${password}`);
             throw new Error("Email or password incorrect");
         }
 
         const passwordCorrect = await compare(password, user.password);
 
         if (!passwordCorrect) {
+            logger.error(`Email or password incorrect ${email}, ${password}`);
             throw new Error("Email or password incorrect");
         }
 
         //Gerando do token
+        logger.debug(`Token generated`);
         const token = sign({
                 email: user.email
             },

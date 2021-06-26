@@ -9,6 +9,7 @@ import {ListUserSenderController} from "./controllers/ListUserSenderController";
 import {ListUserReceiveController} from "./controllers/ListUserReceiverController";
 import {ListTagsController} from "./controllers/ListsTagsController";
 import {UsersController} from "./controllers/UsersController";
+import {UserController} from "./controllers/UserController";
 
 const router = Router();
 
@@ -20,10 +21,12 @@ const userSenderCompliments = new ListUserSenderController();
 const userReiceiveCompliments = new ListUserReceiveController();
 const listTags = new ListTagsController();
 const users = new UsersController();
+const user = new UserController();
 
 router.post("/tags", ensurmAuthencated, ensureAdmin, createTagController.handle);
 router.get("/tags", ensurmAuthencated, ensureAdmin, listTags.handle);
 router.get("/users", users.handle);
+router.get("/users/:id", ensurmAuthencated, user.handle);
 router.post("/users", createUserController.handle);
 router.post("/auth", createAuthentication.handle);
 router.post("/compliments", ensurmAuthencated, createCompliments.handle);
